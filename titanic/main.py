@@ -62,7 +62,7 @@ class DataFrameImputer(TransformerMixin):
     def fit(self, X, y=None):
 
         self.fill = pd.Series([X[c].value_counts().index[0]
-            if X[c].dtype == np.dtype('O') else X[c].mean() for c in X],
+            if X[c].dtype == np.dtype('O') else X[c].median() for c in X],
             index=X.columns)
 
         return self
@@ -156,7 +156,15 @@ def draw_decision_tree(x,y,catVars):
     graph = graphviz.Source(dot_data)
     graph
     graph.render("titanic")
-    
+
+def plot_corr(df):
+    f = plt.figure(figsize=(19, 15))
+    plt.matshow(df.corr(), fignum=f.number)
+    plt.xticks(range(df.shape[1]), df.columns, fontsize=14, rotation=45)
+    plt.yticks(range(df.shape[1]), df.columns, fontsize=14)
+    cb = plt.colorbar()
+    cb.ax.tick_params(labelsize=14)
+    plt.title('Correlation Matrix', fontsize=16);    
 
 df = pd.read_csv(r'D:\Work\kaggleProjects\titanic\data\train.csv')
 df.set_index(keys='PassengerId',drop=True,inplace=True)
